@@ -1,0 +1,1 @@
+[{* komfortkasse callback template *}]
