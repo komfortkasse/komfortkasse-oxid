@@ -9,7 +9,7 @@
  * Komfortkasse
  * Config Class
  *
- * @version 1.4.4.14-oxid
+ * @version 1.4.4.15-oxid
  */
 class Komfortkasse_Order
 {
@@ -73,6 +73,9 @@ class Komfortkasse_Order
         }
 
         $oCur = $oOrder->getConfig()->getActShopCurrencyObject();
+        if (method_exists($oOrder, 'getOrderCurrency')) {
+            $oCur = $oOrder->getOrderCurrency();
+        }
         $oLang = oxRegistry::getLang();
         $lang_code = $oLang->getLanguageAbbr($oOrder->getOrderLanguage());
 
