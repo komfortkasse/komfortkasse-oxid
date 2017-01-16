@@ -9,7 +9,7 @@
  * Komfortkasse
  * Config Class
  *
- * @version 1.4.4.15-oxid
+ * @version 1.7.3-oxid
  */
 class Komfortkasse_Order
 {
@@ -115,6 +115,7 @@ class Komfortkasse_Order
         $ret ['billing_city'] = $oOrder->getFieldData('oxbillcity');
         $ret ['billing_countrycode'] = $delivery_country;
         $ret ['invoice_number'] [] = $oOrder->getFieldData('oxbillnr');
+        $ret ['shipping_number'] [] = $oOrder->getFieldData('oxtrackcode');
         $billdate = $oOrder->getFieldData('oxbilldate');
         if ($billdate && $billdate <> '0000-00-00')
             $ret ['invoice_date'] = date("d.m.Y", strtotime($billdate));

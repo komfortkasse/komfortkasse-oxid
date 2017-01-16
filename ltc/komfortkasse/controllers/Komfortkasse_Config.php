@@ -1,10 +1,10 @@
 <?php
 
-/** 
+/**
  * Komfortkasse
  * Config Class
- * 
- * @version 1.4.0.2-oxid
+ *
+ * @version 1.7.3-oxid
  */
 class Komfortkasse_Config
 {
@@ -33,20 +33,20 @@ class Komfortkasse_Config
     {
         $sVarType = is_bool($value) ? 'bool' : 'str';
         oxRegistry::getConfig()->saveShopConfVar($sVarType, $constant_key, $value, null, 'module:komfortkasse');
-    
+
     }
 
 
     public static function getConfig($constant_key)
     {
-        // PAID und CANCELLED wird in OXID nicht durch einen Status repräsentiert - logik ist in updateOrder() hartcodiert
+        // PAID und CANCELLED wird in OXID nicht durch einen Status reprï¿½sentiert - logik ist in updateOrder() hartcodiert
         if ($constant_key == self::status_paid || $constant_key == self::status_paid_invoice || $constant_key == self::status_paid_cod)
             return 'PAID';
         if ($constant_key == self::status_cancelled || $constant_key == self::status_cancelled_invoice || $constant_key == self::status_cancelled_cod)
             return 'CANCELLED';
-        
+
         return oxRegistry::getConfig()->getConfigParam($constant_key);
-    
+
     }
 
 
@@ -59,7 +59,7 @@ class Komfortkasse_Config
             // >= 4.9.0
             return urldecode(oxRegistry::getConfig()->getRequestParameter($key));
         }
-    
+
     }
 
 
@@ -75,7 +75,20 @@ class Komfortkasse_Config
         $oBaseShop = oxNew("oxshop");
         $oBaseShop->load($myConfig->getBaseShopId());
         return $oBaseShop->oxshops__oxversion->value;
-        
+
     }
+
+    /**
+     * Output
+     *
+     * @param mixed $s Data to output
+     */
+    public static function output($s)
+    {
+        return $s;
+
+    }
+
+    // end output()
 }
 ?>

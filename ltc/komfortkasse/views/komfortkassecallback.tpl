@@ -1,1 +1,2 @@
 [{* komfortkasse callback template *}]
+[{$skomfortkasseoutput}]

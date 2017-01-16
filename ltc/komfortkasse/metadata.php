@@ -11,7 +11,7 @@ $aModule = array (
 				'de' => 'Mit Komfortkasse automatisieren Sie alle Zahlungsarten, die per Bank&uuml;berweisung get&auml;tigt werden: Vorkasse, Rechnung, Nachnahme.'
 		),
 		'lang' => 'en',
-		'version' => '1.4.4.15',
+		'version' => '1.7.3',
 		'author' => 'komfortkasse.eu Integration Team',
 		'email' => 'integration@komfortkasse.eu',
 		'thumbnail' => 'thumb.png',
