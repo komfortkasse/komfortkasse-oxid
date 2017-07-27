@@ -11,7 +11,7 @@ $aModule = array (
 				'de' => 'Mit Komfortkasse automatisieren Sie alle Zahlungsarten, die per Bank&uuml;berweisung get&auml;tigt werden: Vorkasse, Rechnung, Nachnahme.'
 		),
 		'lang' => 'en',
-		'version' => '1.7.4',
+		'version' => '1.7.6',
 		'author' => 'komfortkasse.eu Integration Team',
 		'email' => 'integration@komfortkasse.eu',
 		'thumbnail' => 'thumb.png',
@@ -58,6 +58,12 @@ $aModule = array (
 						'type' => 'str',
 						'value' => 'oxidcashondel'
 				),
+		        array (
+		                'group' => 'main',
+		                'name' => 'kkInvoiceCODOnlyWhenSent',
+		                'type' => 'bool',
+		                'value' => 'false'
+		        ),
 		        array (
 						'group' => 'komfortkasse_advanced',
 						'name' => 'kkEncryption',

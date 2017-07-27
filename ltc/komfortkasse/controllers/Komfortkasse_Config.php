@@ -4,7 +4,7 @@
  * Komfortkasse
  * Config Class
  *
- * @version 1.7.3-oxid
+ * @version 1.7.6-oxid
  */
 class Komfortkasse_Config
 {
@@ -27,6 +27,7 @@ class Komfortkasse_Config
     const apikey = 'kkApikey';
     const publickey = 'kkPublickey';
     const privatekey = 'kkPrivatekey';
+    const invoiceCODOnlyWhenSent = 'kkInvoiceCODOnlyWhenSent';
 
 
     public static function setConfig($constant_key, $value)

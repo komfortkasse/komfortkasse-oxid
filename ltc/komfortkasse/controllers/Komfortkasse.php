@@ -8,7 +8,7 @@ require_once 'Komfortkasse_Order.php';
  */
 class Komfortkasse
 {
-    const PLUGIN_VER = '1.7.3';
+    const PLUGIN_VER = '1.7.6';
     const MAXLEN_SSL = 117;
     const LEN_MCRYPT = 16;
 
@@ -398,6 +398,9 @@ class Komfortkasse
         }
         // See if order is relevant.
         if (!self::isOpen($order)) {
+            return;
+        }
+        if (method_exists (Komfortkasse_Order, 'isOpen') && !Komfortkasse_Order::isOpen($order)) {
             return;
         }
 

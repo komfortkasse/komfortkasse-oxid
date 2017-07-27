@@ -9,7 +9,7 @@
  * Komfortkasse
  * Config Class
  *
- * @version 1.7.3-oxid
+ * @version 1.7.6-oxid
  */
 class Komfortkasse_Order
 {
@@ -21,33 +21,52 @@ class Komfortkasse_Order
 
         $oDb = oxDb::getDb();
 
+        $used = false;
+
         $sql = "select oxordernr from oxorder where oxpaid='0000-00-00 00:00:00' and oxstorno=0 and (";
         $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods));
-        for($i = 0; $i < count($paycodes); $i++) {
-            $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
-            if ($i < count($paycodes) - 1) {
-                $sql .= " or ";
+        if (count($paycodes) > 0) {
+            $used = true;
+            $sql .= " ( ";
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
             }
+            $sql .= " ) ";
         }
         $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_invoice));
-        for($i = 0; $i < count($paycodes); $i++) {
-            if ($i == 0) {
+        if (count($paycodes) > 0) {
+            if ($used)
                 $sql .= " or ";
+            $used = true;
+            $sql .= " ( ( ";
+            if (Komfortkasse_Config::getConfig(Komfortkasse_Config::invoiceCODOnlyWhenSent))
+                $sql .= " oxsenddate<>'0000-00-00 00:00:00') and ( ";
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
             }
-            $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
-            if ($i < count($paycodes) - 1) {
-                $sql .= " or ";
-            }
+            $sql .= " ) ) ";
         }
         $paycodes = preg_split('/,/', Komfortkasse_Config::getConfig(Komfortkasse_Config::payment_methods_cod));
-        for($i = 0; $i < count($paycodes); $i++) {
-            if ($i == 0) {
+        if (count($paycodes) > 0) {
+            if ($used)
                 $sql .= " or ";
+            $used = true;
+            $sql .= " ( ( ";
+            if (Komfortkasse_Config::getConfig(Komfortkasse_Config::invoiceCODOnlyWhenSent))
+                $sql .= " oxsenddate<>'0000-00-00 00:00:00') and ( ";
+            for($i = 0; $i < count($paycodes); $i++) {
+                $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
+                if ($i < count($paycodes) - 1) {
+                    $sql .= " or ";
+                }
             }
-            $sql .= " oxpaymenttype like '" . $paycodes [$i] . "' ";
-            if ($i < count($paycodes) - 1) {
-                $sql .= " or ";
-            }
+            $sql .= " ) ) ";
         }
         $sql .= " )";
         $result = $oDb->getAll($sql);
@@ -65,6 +84,9 @@ class Komfortkasse_Order
 
     public static function getOrder($number)
     {
+        if (!$number)
+            return;
+
         $sSelect = "select oxid from oxorder where oxordernr = '" . $number . "'";
         $soxId = oxDb::getDb()->getOne($sSelect);
         $oOrder = oxNew("oxorder");
@@ -117,8 +139,13 @@ class Komfortkasse_Order
         $ret ['invoice_number'] [] = $oOrder->getFieldData('oxbillnr');
         $ret ['shipping_number'] [] = $oOrder->getFieldData('oxtrackcode');
         $billdate = $oOrder->getFieldData('oxbilldate');
-        if ($billdate && $billdate <> '0000-00-00')
+        if ($billdate && $billdate != '0000-00-00' && $billdate != '-')
             $ret ['invoice_date'] = date("d.m.Y", strtotime($billdate));
+
+        // Invoice/COD: dueDate is sendDate when activated
+        $senddate = $oOrder->getFieldData('oxsenddate');
+        if (!$ret ['invoice_date'] && $senddate && $senddate != '0000-00-00' && $senddate != '-' && Komfortkasse_Config::getConfig(Komfortkasse_Config::invoiceCODOnlyWhenSent))
+            $ret ['invoice_date'] = date("d.m.Y", strtotime($senddate));
 
         $order_products = $oOrder->getOrderArticles(true);
         foreach ($order_products as $product) {
