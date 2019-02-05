@@ -3,6 +3,7 @@ $sLangName = "English";
 $aLang = array (
 
 		'charset' => 'UTF-8',
+    'SHOP_MODULE_GROUP_main' => 'Settings',
 		'SHOP_MODULE_GROUP_komfortkasse_advanced' => 'Advanced Settings',
 		'SHOP_MODULE_kkActivateExport' => 'Export orders',
 		'SHOP_MODULE_kkActivateUpdate' => 'Update orders',
